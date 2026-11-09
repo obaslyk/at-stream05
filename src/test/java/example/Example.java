@@ -1,3 +1,5 @@
+package example;
+
 public class Example {
 
     public void forLoopExample(String[] shelf) {
