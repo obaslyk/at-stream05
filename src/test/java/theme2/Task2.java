@@ -9,17 +9,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import theme1.Methods;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static javax.swing.text.html.parser.DTDConstants.NAMES;
-import static theme1.Methods.reverse;
-import static theme1.Methods.sumToN;
 
 public class Task2 {
 
@@ -36,7 +33,10 @@ public class Task2 {
 
     @Test
     void hasBugTest() {
-        String[] withBug = {"Ok", "Fine", "Bug", "Done", "Test"}; // Bug есть, ожидаем true
+        //String[] withBug = {"Ok", "Fine", "Bug", "Done", "Test"}; // Bug есть, ожидаем true
+        Random random = new Random();
+        String[] withBug = {"Ok", "Fine", "Done", "Test", "Ok"};
+        withBug[random.nextInt(withBug.length)] = random.nextBoolean() ? "Bug" : "BUG";
         //вызываем тестируемый метод
         boolean actualWith = Methods.hasBug(withBug);
         System.out.println("hasBug(" + Arrays.toString(withBug) + ") = " + actualWith);
@@ -288,7 +288,10 @@ public class Task2 {
     @MethodSource({"ranges"})
     void getEvenInRangeTest(int start, int end) {
 
-        String expected = IntStream.rangeClosed(start, end).toString();
+        String expected = IntStream.rangeClosed(start, end)
+                .filter(i -> i % 2 == 0)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(" "));
 
         //вызываем тестируемый метод
         String actual = Methods.getEvenInRange(start, end);
@@ -329,7 +332,5 @@ public class Task2 {
             System.out.println("TEST FAILED");
         }
     }
-
-
 }
 
